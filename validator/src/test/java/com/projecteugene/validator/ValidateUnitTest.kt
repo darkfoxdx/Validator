@@ -16,14 +16,14 @@ import org.junit.Assert.assertThat
 class ValidateUnitTest {
     @Test
     fun validate_that_isNric_true() {
-        val actual = Validate.that("900918105767", IsNric("Error"))
+        val actual = Validate.that("900918105767", IsNric(null))
         val expected = true
         assertEquals(actual, expected)
     }
 
     @Test
     fun validate_that_isNric_false() {
-        val actual = Validate.that("90091810576", IsNric("Error"))
+        val actual = Validate.that("90091810576", IsNric(null))
         val expected = false
         assertEquals(actual, expected)
     }
@@ -31,8 +31,8 @@ class ValidateUnitTest {
     @Test
     fun validate_that_isNricComposite_true() {
         val actual = Validate
-            .that(      "900918105767", IsNric("Error"))
-            .andThat(   "101010101010", IsNric("Error"))
+            .that(      "900918105767", IsNric(null))
+            .andThat(   "101010101010", IsNric(null))
         val expected = true
         assertEquals(actual, expected)
     }
@@ -40,8 +40,8 @@ class ValidateUnitTest {
     @Test
     fun validate_that_isNricComposite_false() {
         val actual = Validate
-                .that(  "900918105767", IsNric("Error"))
-            .andThat(   "0", IsNric("Error"))
+            .that(  "900918105767", IsNric(null))
+            .andThat(   "0", IsNric(null))
         val expected = false
         assertEquals(actual, expected)
     }
