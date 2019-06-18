@@ -3,8 +3,8 @@ package com.projecteugene.validator.nric
 import com.projecteugene.validator.nric.NRICConstant.Country
 import com.projecteugene.validator.nric.NRICConstant.Gender
 import com.projecteugene.validator.nric.NRICConstant.State
-import com.projecteugene.validator.util.ValidatorUtil
 import com.projecteugene.validator.config.LibConfig
+import com.projecteugene.validator.validator.IsNric
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,7 +16,7 @@ object NRICUtil {
     fun parse(number: String): NRIC {
         val nric = NRIC(number)
         try {
-            ValidatorUtil.validateIsNric(number)
+            IsNric(null).check(number)
             nric.apply {
                 date = parseDate(number)
                 country = parseCountry(number)

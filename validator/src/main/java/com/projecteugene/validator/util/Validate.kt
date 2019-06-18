@@ -14,7 +14,6 @@ object Validate {
             false
         }
     }
-
     fun that(editText: EditText?, validator: Validator): Boolean {
         return that(editText?.text.toString(), validator)
     }
