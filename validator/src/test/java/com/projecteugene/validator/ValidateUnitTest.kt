@@ -2,7 +2,7 @@ package com.projecteugene.validator
 
 import com.projecteugene.validator.util.Validate
 import com.projecteugene.validator.util.andThat
-import com.projecteugene.validator.validator.IsNric
+import com.projecteugene.validator.validator.*
 import org.junit.Test
 
 import org.junit.Assert.assertEquals
@@ -16,16 +16,16 @@ import org.junit.Assert.assertThat
 class ValidateUnitTest {
     @Test
     fun validate_that_isNric_true() {
-        val actual = Validate.that("900918105767", IsNric(null))
-        val expected = true
-        assertEquals(actual, expected)
+        val expected = Validate.that("900918105767", IsNric(null))
+        val actual = true
+        assertEquals(expected, actual)
     }
 
     @Test
     fun validate_that_isNric_false() {
         val actual = Validate.that("90091810576", IsNric(null))
         val expected = false
-        assertEquals(actual, expected)
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -34,7 +34,7 @@ class ValidateUnitTest {
             .that(      "900918105767", IsNric(null))
             .andThat(   "101010101010", IsNric(null))
         val expected = true
-        assertEquals(actual, expected)
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -43,6 +43,76 @@ class ValidateUnitTest {
             .that(  "900918105767", IsNric(null))
             .andThat(   "0", IsNric(null))
         val expected = false
-        assertEquals(actual, expected)
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun validate_that_compositeThat_true() {
+        val actual = Validate
+            .that(  "Password12345!",
+                IsNotEmpty(null),
+                HasDigit(null),
+                HasLowercase(null),
+                HasSpecialCharacter(null),
+                HasUppercase(null),
+                IsEqualLength(null, 14))
+        val expected = true
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun validate_that_compositeThat_false() {
+        val actual = Validate
+            .that(  "password12345!",
+                IsNotEmpty(null),
+                HasDigit(null),
+                HasLowercase(null),
+                HasSpecialCharacter(null),
+                HasUppercase(null),
+                IsEqualLength(null, 14))
+        val expected = false
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun validate_that_compositeThatAnd_true() {
+        val actual = Validate
+            .that("Password12345!",
+                IsNotEmpty(null),
+                HasDigit(null),
+                HasLowercase(null),
+                HasSpecialCharacter(null),
+                HasUppercase(null),
+                IsEqualLength(null, 14))
+            .andThat("greaT000&Jwi4$",
+                IsNotEmpty(null),
+                HasDigit(null),
+                HasLowercase(null),
+                HasSpecialCharacter(null),
+                HasUppercase(null),
+                IsEqualLength(null, 14))
+        val expected = true
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun validate_that_compositeThatAnd_false() {
+        val actual = Validate
+            .that("Password12345!",
+                IsNotEmpty(null),
+                HasDigit(null),
+                HasLowercase(null),
+                HasSpecialCharacter(null),
+                HasUppercase(null),
+                IsEqualLength(null, 14))
+            .andThat("badpassword",
+                IsNotEmpty(null),
+                HasDigit(null),
+                HasLowercase(null),
+                HasSpecialCharacter(null),
+                HasUppercase(null),
+                IsEqualLength(null, 14))
+        val expected = false
+        assertEquals(expected, actual)
     }
 }

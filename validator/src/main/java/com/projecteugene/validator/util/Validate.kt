@@ -49,12 +49,19 @@ object Validate {
     }
 }
 
-fun Boolean.andThat(textValue: String, validator: Validator): Boolean {
-    return this && Validate.that(textValue, validator)
+fun Boolean.andThat(textValue: String, vararg validators: Validator): Boolean {
+    return this && Validate.that(textValue, *validators)
 }
-fun Boolean.andThat(editText: EditText?, validator: Validator): Boolean {
-    return this && Validate.that(editText, validator)
+fun Boolean.andThat(editText: EditText?, vararg validators: Validator): Boolean {
+    return this && Validate.that(editText, *validators)
 }
-fun Boolean.andThat(textInputLayout: TextInputLayout?, validator: Validator): Boolean {
-    return this && Validate.that(textInputLayout, validator)
+fun Boolean.andThat(textInputLayout: TextInputLayout?, vararg validators: Validator): Boolean {
+    return this && Validate.that(textInputLayout, *validators)
+}
+
+fun ValidateUnit.andShowThat(textInputLayout: TextInputLayout?, vararg validators: Validator): ValidateUnit {
+    return Validate.showThat(textInputLayout, *validators)
+}
+fun ValidateUnit.andShowThat(editText: EditText?, vararg validators: Validator): ValidateUnit {
+    return Validate.showThat(editText, *validators)
 }
