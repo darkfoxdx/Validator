@@ -11,10 +11,15 @@ import com.projecteugene.validator.util.Validator
 /**
  * Created by Eugene Low
  */
-class ValidateEditTextWatcher(private val editText: EditText?,
+class ValidateEditTextWatcher(private val isLive: Boolean,
+                              private val editText: EditText?,
                               private vararg val validators: Validator) : ValidateTextWatcher() {
     override fun update() {
-        unit = Validate.showThat(editText, *validators)
+        unit = if (isLive) {
+            Validate.showThat(editText, *validators)
+        } else {
+            Validate.that(editText, *validators)
+        }
         liveData.value = unit
     }
 }

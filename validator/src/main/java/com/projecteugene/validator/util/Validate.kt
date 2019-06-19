@@ -55,33 +55,12 @@ object Validate {
         }
     }
 
-    fun executeAddSource(validateLiveData: ValidateLiveData,
-                         textInputLayout: TextInputLayout?, vararg validators: Validator): ValidateLiveData {
-        val textWatcher = ValidateTextInputLayoutWatcher(textInputLayout, *validators)
-        textInputLayout?.editText?.addTextChangedListener(textWatcher)
-        validateLiveData.addSource(textWatcher.liveData) {
-            validateLiveData.map[textWatcher.liveData] = it.result
-            validateLiveData.value = validateLiveData.result
-        }
-        return validateLiveData
-    }
-
-    fun executeAddSource(validateLiveData: ValidateLiveData, editText: EditText?, vararg validators: Validator): ValidateLiveData {
-        val textWatcher = ValidateEditTextWatcher(editText, *validators)
-        editText?.addTextChangedListener(textWatcher)
-        validateLiveData.addSource(textWatcher.liveData) {
-            validateLiveData.map[textWatcher.liveData] = it.result
-            validateLiveData.value = validateLiveData.result
-        }
-        return validateLiveData
-    }
-
     fun watchThat(textInputLayout: TextInputLayout?, vararg validators: Validator): ValidateLiveData {
-        return executeAddSource(ValidateLiveData(), textInputLayout, *validators)
+        return executeAddSource(ValidateLiveData(), true, textInputLayout, *validators)
     }
 
     fun watchThat(editText: EditText?, vararg validators: Validator): ValidateLiveData {
-        return executeAddSource(ValidateLiveData(), editText, *validators)
+        return executeAddSource(ValidateLiveData(), true, editText, *validators)
     }
 }
 
@@ -107,12 +86,34 @@ fun ValidateUnit.andShowThat(editText: EditText?, vararg validators: Validator):
     return ValidateUnit(result)
 }
 
+private fun executeAddSource(validateLiveData: ValidateLiveData, isLive: Boolean, textInputLayout: TextInputLayout?,
+                             vararg validators: Validator): ValidateLiveData {
+    val textWatcher = ValidateTextInputLayoutWatcher(isLive, textInputLayout, *validators)
+    textInputLayout?.editText?.addTextChangedListener(textWatcher)
+    validateLiveData.addSource(textWatcher.liveData) {
+        validateLiveData.map[textWatcher.liveData] = it.result
+        validateLiveData.value = validateLiveData.result
+    }
+    return validateLiveData
+}
+
+private fun executeAddSource(validateLiveData: ValidateLiveData, isLive: Boolean, editText: EditText?,
+                             vararg validators: Validator): ValidateLiveData {
+    val textWatcher = ValidateEditTextWatcher(isLive, editText, *validators)
+    editText?.addTextChangedListener(textWatcher)
+    validateLiveData.addSource(textWatcher.liveData) {
+        validateLiveData.map[textWatcher.liveData] = it.result
+        validateLiveData.value = validateLiveData.result
+    }
+    return validateLiveData
+}
+
 fun ValidateLiveData.andWatchThat(textInputLayout: TextInputLayout?,
                                                 vararg validators: Validator): MediatorLiveData<ValidateUnit> {
-    return Validate.executeAddSource(this, textInputLayout, *validators)
+    return executeAddSource(this, true, textInputLayout, *validators)
 }
 
 fun ValidateLiveData.andWatchThat(editText: EditText?,
                                                 vararg validators: Validator): MediatorLiveData<ValidateUnit> {
-    return Validate.executeAddSource(this, editText, *validators)
+    return executeAddSource(this, true, editText, *validators)
 }

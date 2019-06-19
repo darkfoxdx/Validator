@@ -15,6 +15,9 @@ abstract class ValidateTextWatcher : TextWatcher {
     val liveData = MutableLiveData<ValidateUnit>()
     protected lateinit var unit: ValidateUnit
     abstract fun update()
+    init {
+        liveData.value = ValidateUnit(false)
+    }
 
     override fun afterTextChanged(s: Editable?) {
         update()
