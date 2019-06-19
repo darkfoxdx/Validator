@@ -20,5 +20,6 @@ enum class ErrorCode {
     NOT_IMPLEMENTED,
     NOT_MALAYSIAN_PHONE_NUMBER,
     NOT_EMAIL,
+    NOT_WEB_URL,
     CUSTOM
 }

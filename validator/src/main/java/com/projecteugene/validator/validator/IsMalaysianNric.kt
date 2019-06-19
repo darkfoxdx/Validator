@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
 /**
  * Created by Eugene Low
  */
-class IsNric(errorMessage: String?): Validator(errorMessage) {
+class IsMalaysianNric(errorMessage: String?): Validator(errorMessage) {
     override fun check(textValue: String): Boolean {
         IsNotEmpty(errorMessage).check(textValue)
         IsEqualLength(errorMessage, NRICConstant.LENGTH).check(textValue)

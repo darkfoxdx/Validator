@@ -6,7 +6,6 @@ import com.projecteugene.validator.validator.*
 import org.junit.Test
 
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertThat
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -16,34 +15,34 @@ import org.junit.Assert.assertThat
 class ValidateUnitTest {
     @Test
     fun validate_that_isNric_true() {
-        val expected = Validate.that("900918105767", IsNric(null))
-        val actual = true
-        assertEquals(expected, actual)
+        val actual = Validate.that("900918105767", IsMalaysianNric(null))
+        val expected = true
+        assertEquals(expected, actual.result)
     }
 
     @Test
     fun validate_that_isNric_false() {
-        val actual = Validate.that("90091810576", IsNric(null))
+        val actual = Validate.that("90091810576", IsMalaysianNric(null))
         val expected = false
-        assertEquals(expected, actual)
+        assertEquals(expected, actual.result)
     }
 
     @Test
     fun validate_that_isNricComposite_true() {
         val actual = Validate
-            .that(      "900918105767", IsNric(null))
-            .andThat(   "101010101010", IsNric(null))
+            .that(      "900918105767", IsMalaysianNric(null))
+            .andThat(   "101010101010", IsMalaysianNric(null))
         val expected = true
-        assertEquals(expected, actual)
+        assertEquals(expected, actual.result)
     }
 
     @Test
     fun validate_that_isNricComposite_false() {
         val actual = Validate
-            .that(  "900918105767", IsNric(null))
-            .andThat(   "0", IsNric(null))
+            .that(  "900918105767", IsMalaysianNric(null))
+            .andThat(   "0", IsMalaysianNric(null))
         val expected = false
-        assertEquals(expected, actual)
+        assertEquals(expected, actual.result)
     }
 
     @Test
@@ -57,7 +56,7 @@ class ValidateUnitTest {
                 HasUppercase(null),
                 IsEqualLength(null, 14))
         val expected = true
-        assertEquals(expected, actual)
+        assertEquals(expected, actual.result)
     }
 
     @Test
@@ -71,7 +70,7 @@ class ValidateUnitTest {
                 HasUppercase(null),
                 IsEqualLength(null, 14))
         val expected = false
-        assertEquals(expected, actual)
+        assertEquals(expected, actual.result)
     }
 
     @Test
@@ -92,7 +91,7 @@ class ValidateUnitTest {
                 HasUppercase(null),
                 IsEqualLength(null, 14))
         val expected = true
-        assertEquals(expected, actual)
+        assertEquals(expected, actual.result)
     }
 
     @Test
@@ -113,6 +112,6 @@ class ValidateUnitTest {
                 HasUppercase(null),
                 IsEqualLength(null, 14))
         val expected = false
-        assertEquals(expected, actual)
+        assertEquals(expected, actual.result)
     }
 }
