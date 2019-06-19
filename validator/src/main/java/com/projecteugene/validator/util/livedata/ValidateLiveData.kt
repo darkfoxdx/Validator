@@ -8,12 +8,12 @@ import com.projecteugene.validator.util.ValidateUnit
  * Created by Eugene Low
  */
 class ValidateLiveData: MediatorLiveData<ValidateUnit>() {
-    val map: MutableMap<LiveData<ValidateUnit>, Boolean> = HashMap()
+    val set: MutableSet<LiveData<ValidateUnit>> = HashSet()
     val result: ValidateUnit
         get() {
             var total = true
-            for(item in map) {
-                total = total && item.value
+            for(item in set) {
+                total = total && item.value?.result?:false
             }
             return ValidateUnit(total)
         }
