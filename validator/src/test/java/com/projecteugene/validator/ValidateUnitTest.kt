@@ -1,7 +1,5 @@
 package com.projecteugene.validator
 
-import com.projecteugene.validator.util.Validate
-import com.projecteugene.validator.util.andThat
 import com.projecteugene.validator.validator.*
 import org.junit.Test
 

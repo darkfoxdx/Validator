@@ -1,12 +1,14 @@
-package com.projecteugene.validator.util
+package com.projecteugene.validator
 
 import android.widget.EditText
 import androidx.lifecycle.MediatorLiveData
 import com.google.android.material.textfield.TextInputLayout
+import com.projecteugene.validator.util.ValidateException
+import com.projecteugene.validator.util.ValidateUnit
+import com.projecteugene.validator.util.Validator
 import com.projecteugene.validator.util.livedata.ValidateLiveData
 import com.projecteugene.validator.util.textwatcher.ValidateEditTextWatcher
 import com.projecteugene.validator.util.textwatcher.ValidateTextInputLayoutWatcher
-import com.projecteugene.validator.util.textwatcher.ValidateTextWatcher
 
 /**
  * Created by Eugene Low
@@ -65,7 +67,8 @@ object Validate {
 }
 
 private fun executeAddSource(validateLiveData: ValidateLiveData, isLive: Boolean, textInputLayout: TextInputLayout?,
-                             vararg validators: Validator): ValidateLiveData {
+                             vararg validators: Validator
+): ValidateLiveData {
     val textWatcher = ValidateTextInputLayoutWatcher(isLive, textInputLayout, *validators)
     textInputLayout?.editText?.addTextChangedListener(textWatcher)
     validateLiveData.addSource(textWatcher.liveData) {
@@ -76,7 +79,8 @@ private fun executeAddSource(validateLiveData: ValidateLiveData, isLive: Boolean
 }
 
 private fun executeAddSource(validateLiveData: ValidateLiveData, isLive: Boolean, editText: EditText?,
-                             vararg validators: Validator): ValidateLiveData {
+                             vararg validators: Validator
+): ValidateLiveData {
     val textWatcher = ValidateEditTextWatcher(isLive, editText, *validators)
     editText?.addTextChangedListener(textWatcher)
     validateLiveData.addSource(textWatcher.liveData) {
@@ -109,11 +113,13 @@ fun ValidateUnit.andShowThat(editText: EditText?, vararg validators: Validator):
 }
 
 fun ValidateLiveData.andWatchThat(textInputLayout: TextInputLayout?,
-                                                vararg validators: Validator): MediatorLiveData<ValidateUnit> {
+                                                vararg validators: Validator
+): MediatorLiveData<ValidateUnit> {
     return executeAddSource(this, true, textInputLayout, *validators)
 }
 
 fun ValidateLiveData.andWatchThat(editText: EditText?,
-                                                vararg validators: Validator): MediatorLiveData<ValidateUnit> {
+                                                vararg validators: Validator
+): MediatorLiveData<ValidateUnit> {
     return executeAddSource(this, true, editText, *validators)
 }
