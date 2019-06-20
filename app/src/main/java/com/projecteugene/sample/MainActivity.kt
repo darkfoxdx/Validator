@@ -46,5 +46,11 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
             }
         }
+
+        validateButton.addWatcher(textInputLayout, IsMalaysianNric("Not a NRIC"))
+            .addWatcher(textInputLayout2,
+                HasUppercase("Must have one upper case character"),
+                HasSpecialCharacter("Must have one special character"),
+                HasDigit("Must have one digit"))
     }
 }
