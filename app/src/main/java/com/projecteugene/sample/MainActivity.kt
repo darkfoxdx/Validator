@@ -34,7 +34,9 @@ class MainActivity : AppCompatActivity() {
 
         validateTextInputLayout.addValidators(IsEqualLength("Must be 4 digits", 4))
         validateTextInputLayout.setHasLiveValidation(true)
-        validateTextInputLayout.addValidators(IsMoreOrEqual("Must be more than 100", 101))
+        validateTextInputLayout.addValidators(
+            IsMoreOrEqual("Must be more than 10", 11),
+            IsLessOrEqual("Must be less than 2000", 1999))
         validateTextInputLayout.setHasLiveValidation(false)
 
         button2.setOnClickListener {
