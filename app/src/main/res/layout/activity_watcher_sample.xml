@@ -33,22 +33,36 @@
                 android:inputType="textVisiblePassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/textInputLayout3"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:hint="PIN">
-        <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editText3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textVisiblePassword"/>
-    </com.google.android.material.textfield.TextInputLayout>
-
     <Button
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Validate"/>
+
+    <com.projecteugene.validator.ValidateTextInputLayout
+            android:id="@+id/validateTextInputLayout"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:hint="Between 10 and 2000">
+        <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textVisiblePassword"/>
+    </com.projecteugene.validator.ValidateTextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Validate2"/>
+
+    <com.projecteugene.validator.ValidateMaterialButton
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:id="@+id/validateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ValidateButton"/>
+
 </LinearLayout>

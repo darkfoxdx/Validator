@@ -1,5 +1,6 @@
 package com.projecteugene.validator
 
+import android.util.Log
 import android.widget.EditText
 import androidx.lifecycle.MediatorLiveData
 import com.google.android.material.textfield.TextInputLayout
@@ -14,13 +15,6 @@ import com.projecteugene.validator.util.textwatcher.ValidateTextInputLayoutWatch
  * Created by Eugene Low
  */
 object Validate {
-    @Throws(ValidateException::class)
-    private fun execute(textValue: String, vararg validators: Validator) {
-        for (item in validators) {
-            item.check(textValue)
-        }
-    }
-
     fun that(textValue: String, vararg validators: Validator): ValidateUnit {
         return try {
             execute(textValue, *validators)
@@ -37,24 +31,19 @@ object Validate {
     }
 
     fun showThat(textInputLayout: TextInputLayout?, vararg validators: Validator): ValidateUnit {
-        return try {
-            execute(textInputLayout?.editText?.text.toString(), *validators)
-            textInputLayout?.error = null
-            ValidateUnit(true)
-        } catch (error: ValidateException) {
-            textInputLayout?.error = error.errorMessage
-            ValidateUnit(false)
-        }
+        return executeShowThat(false, textInputLayout, *validators)
     }
 
     fun showThat(editText: EditText?, vararg validators: Validator): ValidateUnit {
-        return try {
-            execute(editText?.text.toString(), *validators)
-            ValidateUnit(true)
-        } catch (error: ValidateException) {
-            editText?.error = error.errorMessage
-            ValidateUnit(false)
-        }
+        return executeShowThat(false, editText, *validators)
+    }
+
+    fun showFocusThat(textInputLayout: TextInputLayout?, vararg validators: Validator): ValidateUnit {
+        return executeShowThat(true, textInputLayout, *validators)
+    }
+
+    fun showFocusThat(editText: EditText?, vararg validators: Validator): ValidateUnit {
+        return executeShowThat(true, editText, *validators)
     }
 
     fun watchThat(textInputLayout: TextInputLayout?, vararg validators: Validator): ValidateLiveData {
@@ -63,6 +52,37 @@ object Validate {
 
     fun watchThat(editText: EditText?, vararg validators: Validator): ValidateLiveData {
         return executeAddSource(ValidateLiveData(), true, editText, *validators)
+    }
+}
+@Throws(ValidateException::class)
+private fun execute(textValue: String, vararg validators: Validator) {
+    for (item in validators) {
+        item.check(textValue)
+    }
+}
+
+private fun executeShowThat(shouldFocus: Boolean,
+                            textInputLayout: TextInputLayout?, vararg validators: Validator): ValidateUnit {
+    return try {
+        execute(textInputLayout?.editText?.text.toString(), *validators)
+        textInputLayout?.error = null
+        ValidateUnit(true)
+    } catch (error: ValidateException) {
+        textInputLayout?.error = error.errorMessage
+        if (shouldFocus) textInputLayout?.editText?.requestFocus()
+        ValidateUnit(false)
+    }
+}
+
+private fun executeShowThat(shouldFocus: Boolean,
+                            editText: EditText?, vararg validators: Validator): ValidateUnit {
+    return try {
+        execute(editText?.text.toString(), *validators)
+        ValidateUnit(true)
+    } catch (error: ValidateException) {
+        editText?.error = error.errorMessage
+        if (shouldFocus) editText?.requestFocus()
+        ValidateUnit(false)
     }
 }
 
@@ -91,25 +111,34 @@ private fun executeAddSource(validateLiveData: ValidateLiveData, isLive: Boolean
 }
 
 fun ValidateUnit.andThat(textValue: String, vararg validators: Validator): ValidateUnit {
-    val result = this.result && Validate.that(textValue, *validators).result
-    return ValidateUnit(result)
+    val result = Validate.that(textValue, *validators).result
+    return ValidateUnit(this.result && result)
 }
 fun ValidateUnit.andThat(editText: EditText?, vararg validators: Validator): ValidateUnit {
-    val result = this.result && Validate.that(editText, *validators).result
-    return ValidateUnit(result)
+    val result = Validate.that(editText, *validators).result
+    return ValidateUnit(this.result && result)
 }
 fun ValidateUnit.andThat(textInputLayout: TextInputLayout?, vararg validators: Validator): ValidateUnit {
-    val result = this.result && Validate.that(textInputLayout, *validators).result
-    return ValidateUnit(result)
+    val result = Validate.that(textInputLayout, *validators).result
+    return ValidateUnit(this.result && result)
 }
 
 fun ValidateUnit.andShowThat(textInputLayout: TextInputLayout?, vararg validators: Validator): ValidateUnit {
-    val result = this.result && Validate.showThat(textInputLayout, *validators).result
-    return ValidateUnit(result)
+    val result = executeShowThat(false, textInputLayout, *validators).result
+    return ValidateUnit(this.result && result)
 }
 fun ValidateUnit.andShowThat(editText: EditText?, vararg validators: Validator): ValidateUnit {
-    val result = this.result && Validate.showThat(editText, *validators).result
-    return ValidateUnit(result)
+    val result = executeShowThat(false, editText, *validators).result
+    return ValidateUnit(this.result && result)
+}
+
+fun ValidateUnit.andShowFocusThat(textInputLayout: TextInputLayout?, vararg validators: Validator): ValidateUnit {
+    val result = executeShowThat(this.result, textInputLayout, *validators).result
+    return ValidateUnit(this.result && result)
+}
+fun ValidateUnit.andShowFocusThat(editText: EditText?, vararg validators: Validator): ValidateUnit {
+    val result = executeShowThat(this.result, editText, *validators).result
+    return ValidateUnit(this.result && result)
 }
 
 fun ValidateLiveData.andWatchThat(textInputLayout: TextInputLayout?,
