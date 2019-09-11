@@ -20,7 +20,9 @@ object Validate {
             execute(textValue, *validators)
             ValidateUnit(true)
         } catch (error: ValidateException) {
-            ValidateUnit(false)
+            ValidateUnit(false).apply {
+                errorMessage = error.errorMessage
+            }
         }
     }
     fun that(editText: EditText?, vararg validators: Validator): ValidateUnit {
@@ -111,16 +113,25 @@ private fun executeAddSource(validateLiveData: ValidateLiveData, isLive: Boolean
 }
 
 fun ValidateUnit.andThat(textValue: String, vararg validators: Validator): ValidateUnit {
-    val result = Validate.that(textValue, *validators).result
-    return ValidateUnit(this.result && result)
+    val validate = Validate.that(textValue, *validators)
+    val message = errorMessage?:validate.errorMessage
+    return ValidateUnit(this.result && validate.result).apply {
+        this.errorMessage = message
+    }
 }
 fun ValidateUnit.andThat(editText: EditText?, vararg validators: Validator): ValidateUnit {
-    val result = Validate.that(editText, *validators).result
-    return ValidateUnit(this.result && result)
+    val validate = Validate.that(editText, *validators)
+    val message = errorMessage?:validate.errorMessage
+    return ValidateUnit(this.result && validate.result).apply {
+        this.errorMessage = message
+    }
 }
 fun ValidateUnit.andThat(textInputLayout: TextInputLayout?, vararg validators: Validator): ValidateUnit {
-    val result = Validate.that(textInputLayout, *validators).result
-    return ValidateUnit(this.result && result)
+    val validate = Validate.that(textInputLayout, *validators)
+    val message = errorMessage?:validate.errorMessage
+    return ValidateUnit(this.result && validate.result).apply {
+        this.errorMessage = message
+    }
 }
 
 fun ValidateUnit.andShowThat(textInputLayout: TextInputLayout?, vararg validators: Validator): ValidateUnit {
