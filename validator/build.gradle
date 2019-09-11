@@ -7,7 +7,7 @@ apply plugin: 'kotlin-kapt'
 android {
     def groupProjectID = 'com.projecteugene'
     def artifactProjectID = 'validator'
-    def publishVersionID = '1.0'
+    def publishVersionID = '1.1'
 
     publish {
         userOrg = 'darkfoxdx'
@@ -19,11 +19,11 @@ android {
         website = 'https://github.com/darkfoxdx/Validator'
     }
 
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 1
         versionName publishVersionID
 
