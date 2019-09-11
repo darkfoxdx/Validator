@@ -7,7 +7,7 @@ apply plugin: 'kotlin-kapt'
 android {
     def groupProjectID = 'com.projecteugene'
     def artifactProjectID = 'validator'
-    def publishVersionID = '1.1'
+    def publishVersionID = '1.1.1'
 
     publish {
         userOrg = 'darkfoxdx'
